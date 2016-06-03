@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Events";
+}
+
+<h2 style="padding-top: 40px;">Events</h2>
+@section styles
+{
+    @Styles.Render("~/Content/jquery.dataTables")
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jquery.dataTables")
+    <script type="text/javascript">
+        $(function() {
+            $('#events').dataTable({
+                "serverSide": true,
+                "pageLength": 10,
+                "ajax": {
+                    "url": "@Url.Action("GetUserEvents", "Home", new { Area = "User" })",
+                    "type": "POST",
+                    "data": function (d) {
+                        d.filter = {
+                            "SearchText": ""
+                        };
+                    },
+                    "dataSrc": function(json) {
+                        return json.data;
+                    }
+                },
+                "columns":
+                [
+                    { "data": "Name" },
+                    { "data": "Date" },
+                    { "data": "Address" },
+                    { "data": "City" },
+                    { "data": "State" }
+                ]
+            });
+
+        });
+
+        function gridReload(resetPaging) {
+            resetPaging = resetPaging || true;
+            $('#events').DataTable().ajax.reload(null, resetPaging);
+        }
+    </script>
+}
+
+<table id="events" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>

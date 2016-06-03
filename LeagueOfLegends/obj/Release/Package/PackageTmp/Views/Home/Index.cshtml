@@ -1,0 +1,122 @@
+﻿@using LeagueOfLegends.Domain
+@model LeagueOfLegends.Domain.EventDetails
+@{
+    ViewBag.Title = "BGA eSports — Home";
+}
+
+@section styles
+{
+    @Styles.Render("~/Content/datepicker")
+}
+
+<div class="calendar">
+</div>
+<div class="events">
+    <h3 class="title">events</h3>
+    <h4 class="sub-title">
+        name
+    </h4>
+    <p class="description">League of Legends <a target="_blank" href="http://oce.leagueoflegends.com/">[oce.leagueoflegends.com]</a>
+    </p>
+
+    <h4 class="sub-title">
+        description
+    </h4>
+    <p class="description">Prize: $5,000 cash</p>
+    <p class="description">Prize: $5,000 cash</p>
+    <p class="description">Date: 11th and 12th of June 2016</p>
+    <p class="description">Where: <a target="_blank" href="https://ozcomiccon.com">Oz Comic Con Melbourne</a>
+    </p>
+    <p class="description indent">Entry Free: You will need to purchase a ticket to Oz Comic Con. Entering the tournament is free of charge.</p>
+    <p class="description indent">Schedule:Games begin at 9:35 am on Saturday and 9:50 an on Sunday <a href="/Files/Schedule.xlsx">[download schedule]</a>
+    </p>
+    <p class="description indent">Registration is required before the event and can be done @Html.ActionLink("here", "../Account/Register")
+    </p>
+    <p class="description indent">Games rules can be found @Html.ActionLink("here", "Rules")
+    </p>
+    <p class="description indent">Games will be sudden death with the losing team being eliminated from the tournament. The finals will be a best of 3.</p>
+    <p class="description indent">Contacts:</p>
+    <p class="description"><a href="mailto:support@bgaesports.com">support@bgaesports.com</a>
+    </p>
+    <p class="description"><a href="mailto:social@bgaesports.com">social@bgaesports.com</a>
+    </p>
+    <p class="description"><a href="mailto:volunteer@bgaesports.com">volunteer@bgaesports.com</a>
+    </p>
+    <p class="description"><a href="mailto:contactus@bgaesports.com">contactus@bgaesports.com</a>
+    </p>
+    @if (!User.IsInRole(Role.Admin))
+    {
+        <div class="join-btn" onclick="joinToEvent(@Model.Id)">join</div>
+    }
+</div>
+<div class="players">
+    <h3 class="title">players</h3>
+    <div class="ac-players">
+
+    </div>
+</div>
+<div class="sponsors">
+    <h3 class="title">sponsor</h3>
+    <ul class="gold">
+        <li><img src="@Url.Content("~/Images/audi.png")" width="45" /></li>
+        <li><img src="@Url.Content("~/Images/microsoft.png")" width="80" /></li>
+        <div class="desktop-visible"></div>
+        <li><img src="@Url.Content("~/Images/audi.png")" width="45" /></li>
+        <li class="desktop-visible"><img src="@Url.Content("~/Images/microsoft.png")" width="80" /></li>
+    </ul>
+    <ul class="silver">
+        <li><img src="@Url.Content("~/Images/adidas.png")" width="62" /></li>
+        <li><img src="@Url.Content("~/Images/adidas.png")" width="62" /></li>
+        <div class="desktop-visible"></div>
+        <li><img src="@Url.Content("~/Images/adidas.png")" width="62" /></li>
+        <li class="desktop-visible"><img src="@Url.Content("~/Images/adidas.png")" /></li>
+    </ul>
+    <ul class="bronze">
+        <li><img src="@Url.Content("~/Images/subway.png")" width="62" /></li>
+        <li><img src="@Url.Content("~/Images/subway.png")" width="62" /></li>
+        <div class="desktop-visible"></div>
+        <li><img src="@Url.Content("~/Images/subway.png")" width="62" /></li>
+        <li class="desktop-visible"><img src="@Url.Content("~/Images/subway.png")" /></li>
+    </ul>
+</div>
+@section scripts
+{
+    @Scripts.Render("~/bundles/datepicker")
+    <script type="text/javascript">
+        $(function() {
+            var eventDate = new Date(2016, 5, 11);
+            var eventDateS = new Date(2016, 5, 12);
+            $('.calendar').datepicker({
+                maxViewMode: 0,
+                language: "en-GB",
+                todayHighlight: true,
+                daysOfWeekDisabled: "0,1,2,3,4,5,6",
+                beforeShowDay: function(date) {
+                    if (date.getMonth() === eventDate.getMonth() && date.getDate() === eventDate.getDate()) {
+                        return {
+                            tooltip: '@Model.Name',
+                            classes: 'marked'
+                        };
+                    }
+                    if (date.getMonth() === eventDateS.getMonth() && date.getDate() === eventDateS.getDate()) {
+                        return {
+                            tooltip: '@Model.Name',
+                            classes: 'marked'
+                        };
+                    }
+                }
+            });
+        });
+
+        function joinToEvent(id) {
+            $.post('@Url.Action("Join", "Home")', { "eventId": @Model.Id }, function (data) {
+                if (data.Url) {
+                    $( "body" ).animate({ scrollTop: "0",
+                    }, 300, function() {
+                        $('.login-modal').fadeIn(300);
+                    });
+                }
+            });
+        }
+     </script>
+}

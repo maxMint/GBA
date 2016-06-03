@@ -1,0 +1,13 @@
+﻿
+.logOff-link {
+    float: right;
+    color: #999;
+    padding: 15px 15px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.logOff-link:hover {
+    text-decoration: none;
+    color: #fff;
+}

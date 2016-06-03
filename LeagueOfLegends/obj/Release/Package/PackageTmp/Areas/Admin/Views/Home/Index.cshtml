@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Users";
+}
+
+<h2 style="padding-top: 40px;">Users</h2>
+@section styles
+{
+    @Styles.Render("~/Content/jquery.dataTables")
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jquery.dataTables")
+    <script type="text/javascript">
+        $(function() {
+            $('#users').dataTable({
+                "serverSide": true,
+                "pageLength": 10,
+                "ajax": {
+                    "url": "@Url.Action("GetUsers", "Home", new { Area = "Admin" })",
+                    "type": "POST",
+                    "data": function (d) {
+                        d.filter = {
+                            "SearchText": "",
+                        };
+                    },
+                    "dataSrc": function(json) {
+                        return json.data;
+                    }
+                },
+                "columns":
+                [
+                    { "data": "Name", "render": function(data, type, row) { return '<a href="@Url.Action("UserInfo", "Home", new { Area = "Admin" })/' + row.Id + '">' + row.Name + '</a>'; } },
+                    { "data": "TagName" },
+                    { "data": "TeamName" },
+                    { "data": "Email" },
+                    { "data": "PhoneNumber" },
+                    { "data": "Address" }
+                ]
+            });
+
+        });
+
+        function deleteProduct(id) {
+            $.ajax({
+                url: "@Url.Action("Delete", "Home")/" + id,
+                type: "POST"
+            })
+            .done(function (data) {
+                gridReload();
+            });
+        }
+
+        function gridReload(resetPaging) {
+            resetPaging = resetPaging || true;
+            $('#users').DataTable().ajax.reload(null, resetPaging);
+        }
+    </script>
+}
+
+<table id="users" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Tag Name</th>
+            <th>Team Name</th>
+            <th>Email</th>
+            <th>Phone</th> 
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>

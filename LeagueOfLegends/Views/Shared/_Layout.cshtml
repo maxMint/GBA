@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="http://allfont.ru/allfont.css?fonts=pt-sans" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <header>
+        <div class="header-btns desktop-visible">
+            @Html.Partial("_LoginPartial")
+            <div class="login-modal">
+                @using (Ajax.BeginForm("Login", "Account", null, new AjaxOptions() { HttpMethod = "Post", OnSuccess = "onSuccess" }, new { @id = "login-modal" }))
+            {
+                    @Html.AntiForgeryToken()
+                    <div class="username-row">
+                        <label>E-mail</label>
+                        <input type="text" name="Email" placeholder="E-mail" data-val="true" data-val-required="The E-mail field is required."
+                               data-val-email="The E-mail field is not a valid e-mail address." />
+                    </div>
+                    <div class="password-row">
+                        <label>password</label>
+                        <input type="password" name="Password" placeholder="Password" data-val="true" data-val-required="The Password field is required." />
+                    </div>
+                    <div class="check-info">
+                        <label>
+                            <input name="RememberMe" type="checkbox">
+                            <p>Remember me</p>
+                        </label>
+                    </div>
+                    <input type="submit" value="login">
+                }
+            </div>
+        </div>
+        <ul class="header-social desktop-visible">
+            <li><a class="in"></a></li>
+            <li><a class="fb"></a></li>
+            <li><a class="tw"></a></li>
+            <li><a class="youtube"></a></li>
+            <li><a class="google"></a></li>
+        </ul>
+        <img class="logo desktop-visible" src="@Url.Content("~/Images/logo.png")">
+        <div class="header-info mobile-visible">
+            <div class="menu-btn"></div>
+            <div class="menu-modal">
+                <div class="menu-modal-btn"></div>
+                <ul class="menu-list">
+                    <li><a>login</a></li>
+                    <li><a>sign up</a></li>
+                    <li><a>home</a></li>
+                    <li><a>events</a></li>
+                    <li><a class="active">games</a></li>
+                    <li><a>players</a></li>
+                    <li><a>builds</a></li>
+                    <li><a>contacts</a></li>
+                </ul>
+            </div>
+            <img class="logo" src="@Url.Content("~/Images/logo.png")" />
+            <div class="search-btn"></div>
+            <div class="search-modal">
+                <div class="search-modal-btn"></div>
+                <input class="search-field" type="text" />
+            </div>
+        </div>
+        <img class="wrapper-header desktop-visible" src="@Url.Content("~/Images/wrapper-header.png")">
+        <img src="@Url.Content("~/Images/foto.jpg")">
+    </header>
+    <div class="page-menu desktop-visible hidden">
+        <ul>
+            <li>Home</li>
+            <li class="active">Events</li>
+            <li>games</li>
+            <li>Players</li>
+            <li>Builds</li>
+        </ul>
+        <input type="text" placeholder="Search" class="search-page">
+    </div>
+    <div class="wrapper">
+        @RenderBody()
+    </div>
+    <footer>
+        <ul class="footer-info hidden">
+            <li><a>Support</a></li>
+            <li><a>Privacy Policy</a></li>
+            <li><a>Terms of Use</a></li>
+        </ul>
+        <ul class="footer-social mobile-visible">
+            <li><a class="fb"></a></li>
+            <li><a class="tw"></a></li>
+            <li><a class="in"></a></li>
+            <li><a class="youtube"></a></li>
+            <li><a class="google"></a></li>
+        </ul>
+        <p class="footer-rights desktop-visible">
+            E-Sports. All rights reserved.
+        </p>
+    </footer>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/main")
+    @RenderSection("scripts", required: false)
+
+<script type="text/javascript">
+    $(function () {
+        var path = "@Url.Content("~/Images/avatars/")";
+        var players = $('.ac-players');
+        for (var i = 0; i < 199; i++) {
+            players.append('<div><img src="' + path + (i + 1) + '.jpg" /></div>');
+        }
+    });
+
+    function onSuccess(data) {
+        return data.Success ? window.location = "@Url.Action("Index", "Account", new {}, null)" : alert(data.Message);
+    }
+</script>
+</body>
+</html>

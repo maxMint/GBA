@@ -1,0 +1,46 @@
+﻿@model LeagueOfLegends.Domain.ApplicationUserDetails
+
+@{
+    ViewBag.Title = "Account";
+}
+
+<h2 style="padding-top: 40px;">User @Model.Name</h2>
+
+<div class="col col-small">
+    @Html.LabelFor(m => m.FirstName)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.FirstName)
+</div>
+
+<div class="col col-small">
+    @Html.LabelFor(m => m.LastName)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.LastName)
+</div>
+<div class="col col-small">
+    @Html.LabelFor(m => m.TagName)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.TagName)
+</div>
+
+<div class="col col-small">
+    @Html.LabelFor(m => m.TeamName)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.TeamName)
+</div>
+<div class="col col-small">
+    @Html.LabelFor(m => m.Email)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.Email)
+</div>
+<div class="col col-small">
+    @Html.LabelFor(m => m.Address)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.Address)
+</div>

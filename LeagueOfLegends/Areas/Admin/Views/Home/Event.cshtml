@@ -1,0 +1,100 @@
+﻿@model LeagueOfLegends.Domain.EventDetails
+
+@{
+    ViewBag.Title = "Event";
+}
+@section styles
+{
+    @Styles.Render("~/Content/jquery.dataTables")
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jquery.dataTables")
+    <script type="text/javascript">
+        $(function() {
+            $('#users').dataTable({
+                "serverSide": true,
+                "pageLength": 10,
+                "ajax": {
+                    "url": "@Url.Action("GetEventUsers", "Home", new { Area = "Admin" })",
+                    "type": "POST",
+                    "data": function (d) {
+                        d.filter = {
+                            "SearchText": "",
+                            "EventId": @Model.Id,
+                        };
+                    },
+                    "dataSrc": function(json) {
+                        return json.data;
+                    }
+                },
+                "columns":
+                [
+                    { "data": "Name", "render": function(data, type, row) { return '<a href="@Url.Action("UserInfo", "Home", new { Area = "Admin" })/' + row.Id + '">' + row.Name + '</a>'; } },
+                    { "data": "TagName" },
+                    { "data": "TeamName" },
+                    { "data": "Email" },
+                    { "data": "PhoneNumber" },
+                    { "data": "Address" }
+                ]
+            });
+
+        });
+
+        function gridReload(resetPaging) {
+            resetPaging = resetPaging || true;
+            $('#users').DataTable().ajax.reload(null, resetPaging);
+        }
+    </script>
+}
+
+
+<h2 style="padding-top: 40px;"> @Model.Name</h2>
+
+<div class="col col-small">
+    @Html.LabelFor(m => m.Name)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.Name)
+</div>
+
+<div class="col col-small">
+    @Html.LabelFor(m => m.Date)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.DateText)
+</div>
+<div class="col col-small">
+    @Html.LabelFor(m => m.Address)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.Address)
+</div>
+
+<div class="col col-small">
+    @Html.LabelFor(m => m.City)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.City)
+</div>
+<div class="col col-small">
+    @Html.LabelFor(m => m.State)
+</div>
+<div class="col">
+    @Html.DisplayFor(m => m.State)
+</div>
+
+<table id="users" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Tag Name</th>
+            <th>Team Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
